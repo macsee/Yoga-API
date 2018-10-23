@@ -23,8 +23,8 @@ router.register(r'alumnos', views.AlumnosView)
 router.register(r'profesores', views.ProfesoresView)
 router.register(r'clases', views.ClasesView)
 router.register(r'especialidades', views.EspecialidadesView)
-router.register(r'registro', views.RegistroAlumnosView, 'registro')
-router.register(r'clase_dia', views.ClaseDiaView, 'clase_dia')
+# router.register(r'registro', views.RegistroAlumnosView, 'registro')
+router.register(r'clase_dia', views.RegistroClasesView, 'clase_dia')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

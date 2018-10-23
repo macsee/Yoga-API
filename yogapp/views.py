@@ -88,22 +88,22 @@ class ClasesView(viewsets.ModelViewSet):
     #     return queryset
 
 
-class RegistroAlumnosView(viewsets.ModelViewSet):
+class PagosView(viewsets.ModelViewSet):
     """
     API endpoint that allows Alumnos instances
     to be viewed or edited.
     """
-    queryset = RegistroAlumno.objects.all()
-    serializer_class = RegistroAlumnoSerializer
+    queryset = Pago.objects.all()
+    serializer_class = PagosSerializer
 
 
-class RegistroClasesView(viewsets.ModelViewSet):
+class AsistenciasView(viewsets.ModelViewSet):
     """
     API endpoint that allows Alumnos instances
     to be viewed or edited.
     """
-    queryset = RegistroClase.objects.all()
-    serializer_class = RegistroClaseSerializer
+    queryset = Asistencia.objects.all()
+    serializer_class = AsistenciasSerializer
 
 
 class ClaseDiaView(viewsets.ModelViewSet):
@@ -121,4 +121,27 @@ class ClaseDiaView(viewsets.ModelViewSet):
             #     clase.lista_alumnos = Alumno.objects.filter(clases=clase.pk)
 
         return result_clase
+
+
+class RegistroClasesView(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Alumnos instances
+    to be viewed or edited.
+    """
+    queryset = RegistroClase.objects.all()
+    serializer_class = RegistroClasesSerializer
+
+    def get_queryset(self):
+
+        if validate_args(self.request, "fecha"):
+            if self.request.query_params.get("fecha") == "all":
+                result_clase = RegistroClase.objects.all()
+            else:
+                result_clase = RegistroClase.objects.filter(fecha__iexact=self.request.query_params.get("fecha"))
+
+            # for clase in result_clase:
+            #     clase.lista_alumnos = Alumno.objects.filter(clases=clase.pk)
+
+        return result_clase
+
 
