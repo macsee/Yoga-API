@@ -43,7 +43,7 @@ class AsistenciasSerializer(serializers.ModelSerializer):
 
 
 class ClaseSerializer(serializers.ModelSerializer):
-    profesor = serializers.SerializerMethodField(method_name='get_profesor_data')
+    # profesor = serializers.SerializerMethodField(method_name='get_profesor_data')
 
     class Meta:
         model = Clase
@@ -67,21 +67,22 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RegistroClase
-        fields = ('url', 'pk', 'nombre', 'clase_orig', 'lista_alumnos', 'profesor', 'fecha', 'hora_inicio', 'hora_fin', 'estado')
+        fields = ('pk', 'nombre', 'clase_orig', 'lista_alumnos', 'profesor', 'fecha', 'hora_inicio', 'hora_fin', 'estado')
         # fields = ('pk', 'alumno', 'clase')
 
     @staticmethod
     def get_lista_alumno(obj):
         lista_alumnos = []
-        now = datetime.datetime.now()
+        now = datetime.datetime.now().date()
 
         if now > obj.fecha: #Pasado
-            alumno = Asistencia.objects.filter(clases=obj.pk)
+            alumno = Asistencia.objects.filter(clase_registro=obj.pk)
             for al in alumno:
                 lista_alumnos.append(
                     {
-                        'nombre': '%s, %s' % (al.apellido, al.nombre),
-                        'pk': al.pk,
+                        'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
+                        'alumno_pk': al.alumno.pk,
+                        'asist_pk': al.pk,
                         'presente': True
                     }
                 )
@@ -91,41 +92,61 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
                 lista_alumnos.append(
                     {
                         'nombre': '%s, %s' % (al.apellido, al.nombre),
-                        'pk': al.pk,
+                        'alumno_pk': al.pk,
+                        'asist_pk': "",
                         'presente': False
                     }
                 )
         else: #Presente. Hay que combinar los alumnos de la clase mas los que ya tienen asistencia
             alumno_1 = Alumno.objects.filter(clases=obj.clase_orig)
-            alumno_2 = Asistencia.objects.filter(clases=obj.pk)
-            alumno = (alumno_1 | alumno_2).distinct()
+            alumno_2 = Asistencia.objects.filter(clase_registro_id=obj.pk)
+            alumno_2 = map(lambda al: al.alumno, alumno_2)        
 
-            for al in alumno:
-                if al in alumno_2:
-                    lista_alumnos.append(
-                        {
-                            'nombre': '%s, %s' % (al.apellido, al.nombre),
-                            'pk': al.pk,
-                            'presente': True
-                        }
-                    )
-                else:
-                    lista_alumnos.append(
-                        {
-                            'nombre': '%s, %s' % (al.apellido, al.nombre),
-                            'pk': al.pk,
-                            'presente': False
-                        }
-                    )
+            alumno = (alumno_1 | alumno_2).distinct()
+            # alumno = alumno_2
+
+            
+            # for al in alumno:
+            #     print(al.values())
+                # lista_alumnos.append(
+                #     {
+                #         'nombre': '%s, %s' % (al.apellido, al.nombre),
+                #         'alumno_pk': al.pk,
+                #         'asist_pk': "",
+                #         'presente': False
+                #     }
+                # )
+
+            # for al in alumno:
+            #     if al in alumno_2:
+            #         lista_alumnos.append(
+            #             {
+            #                 'nombre': '%s, %s' % (al.apellido, al.nombre),
+            #                 'pk': al.pk,
+            #                 'presente': True
+            #             }
+            #         )
+            #     else:
+            #         lista_alumnos.append(
+            #             {
+            #                 'nombre': '%s, %s' % (al.apellido, al.nombre),
+            #                 'pk': al.pk,
+            #                 'presente': False
+            #             }
+            #         )
 
         return lista_alumnos
 
     @staticmethod
     def get_profesor_data(obj):
-        return {
-            'nombre': '%s, %s' % (obj.profesor.apellido, obj.profesor.nombre),
-            'pk': obj.profesor.pk
-        }
+        
+        if obj.profesor is None:
+            return {}
+        else:    
+            return {
+                'nombre': '%s, %s' % (obj.profesor.apellido, obj.profesor.nombre),
+                'pk': obj.profesor.pk
+            }
 
 
 class ClaseAlumnoSerializer(serializers.ModelSerializer):
@@ -155,7 +176,10 @@ class ClaseAlumnoSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_profesor_data(obj):
-        return {
-            'nombre': '%s, %s' % (obj.profesor.apellido, obj.profesor.nombre),
-            'pk': obj.profesor.pk
-        }
+        if obj.profesor is None:
+            return None
+        else:    
+            return {
+                'nombre': '%s, %s' % (obj.profesor.apellido, obj.profesor.nombre),
+                'pk': obj.profesor.pk
+            }

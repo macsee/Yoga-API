@@ -131,17 +131,14 @@ class RegistroClasesView(viewsets.ModelViewSet):
     queryset = RegistroClase.objects.all()
     serializer_class = RegistroClasesSerializer
 
-    def get_queryset(self):
+    # def get_queryset(self):
 
-        if validate_args(self.request, "fecha"):
-            if self.request.query_params.get("fecha") == "all":
-                result_clase = RegistroClase.objects.all()
-            else:
-                result_clase = RegistroClase.objects.filter(fecha__iexact=self.request.query_params.get("fecha"))
+    #     if validate_args(self.request, "fecha"):
+    #         if self.request.query_params.get("fecha") == "all":
+    #             result_clase = RegistroClase.objects.all()
+    #         else:
+    #             result_clase = RegistroClase.objects.filter(fecha__iexact=self.request.query_params.get("fecha"))
 
-            # for clase in result_clase:
-            #     clase.lista_alumnos = Alumno.objects.filter(clases=clase.pk)
-
-        return result_clase
+    #     return result_clase
 
 

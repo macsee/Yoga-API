@@ -12,20 +12,20 @@ def create_clases(obj):
     for x in range((dend-dstart).days + 1):
         fecha = dstart + timedelta(days=x)
         if dias[fecha.weekday()] == obj.dia:
-            RegistroClase.objects.create(fecha=fecha, profesor=obj.profesor, clase=obj)
+            RegistroClase.objects.create(fecha=fecha, profesor=obj.profesor, clase_orig=obj, hora_inicio=obj.hora_inicio, hora_fin=obj.hora_fin)
 
 
 def update_clases(obj):
     dstart = date.today()
 
-    RegistroClase.objects.filter(clase__pk__iexact=obj.pk).filter(fecha__lte=dstart).delete()
+    RegistroClase.objects.filter(clase_orig__pk__iexact=obj.pk).filter(fecha__lte=dstart).delete()
     create_clases(obj)
 
 
 def delete_clases(obj):
     dstart = date.today()
 
-    RegistroClase.objects.filter(clase__pk__iexact=obj.pk).filter(fecha__lte=dstart).delete()
+    RegistroClase.objects.filter(clase_orig__pk__iexact=obj.pk).filter(fecha__lte=dstart).delete()
 
 
 class Usuario(models.Model):
@@ -127,7 +127,7 @@ class RegistroClase(models.Model):
 
 class Asistencia(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete=models.SET_NULL, null=True)
-    fecha = models.IntegerField() #positivo o negativo (debito o credito)
+    fecha = models.DateField()
     clase_registro = models.ForeignKey(RegistroClase, on_delete=models.SET_NULL, null=True)
     # clase = models.ForeignKey(Clase, on_delete=models.DO_NOTHING)
 
@@ -142,17 +142,3 @@ class Asistencia(models.Model):
 # Las clases no se borran, se desactivan.
 # Por mas que exista un boton de "delete", no se muestran mas en la interfaz,
 # pero continuan en la base de datos como desactivadas.
-# class RegistroClase(models.Model):
-#     fecha = models.DateField()
-#     profesor = models.ForeignKey(Profesor, on_delete=models.DO_NOTHING)
-#     clase = models.ForeignKey(Clase, on_delete=models.DO_NOTHING)
-#     last_update = models.DateTimeField(auto_now_add=True)
-#     usuario = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING)
-#
-#
-# class RegistroAlumno(models.Model):
-#     fecha = models.DateField()
-#     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)
-#     registro = models.ForeignKey(RegistroClase, on_delete=models.CASCADE)
-#     last_update = models.DateTimeField(auto_now_add=True)
-#     usuario = models.ForeignKey(Usuario, on_delete=models.DO_NOTHING)
