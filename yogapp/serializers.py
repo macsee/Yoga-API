@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 import datetime
+from datetime import date, timedelta
 
 
 class EspecialidadSerializer(serializers.ModelSerializer):
@@ -60,7 +61,6 @@ class ClaseSerializer(serializers.ModelSerializer):
 
 
 class RegistroClasesSerializer(serializers.ModelSerializer):
-    # clases = ClaseSerializer(many=True, read_only=False)
 
     lista_alumnos = serializers.SerializerMethodField(method_name='get_lista_alumno')
     profesor = serializers.SerializerMethodField(method_name='get_profesor_data')
@@ -68,14 +68,13 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistroClase
         fields = ('pk', 'nombre', 'clase_orig', 'lista_alumnos', 'profesor', 'fecha', 'hora_inicio', 'hora_fin', 'estado')
-        # fields = ('pk', 'alumno', 'clase')
 
     @staticmethod
     def get_lista_alumno(obj):
         lista_alumnos = []
-        now = datetime.datetime.now().date()
+        now = datetime.datetime.now() - datetime.timedelta(hours=3)
 
-        if now > obj.fecha: #Pasado
+        if now.date() > obj.fecha: #Pasado
             alumno = Asistencia.objects.filter(clase_registro=obj.pk)
             for al in alumno:
                 lista_alumnos.append(
@@ -86,7 +85,7 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
                         'presente': True
                     }
                 )
-        elif now < obj.fecha: #Futuro
+        elif now.date() < obj.fecha: #Futuro
             alumno = Alumno.objects.filter(clases=obj.clase_orig)
             for al in alumno:
                 lista_alumnos.append(
@@ -98,42 +97,47 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
                     }
                 )
         else: #Presente. Hay que combinar los alumnos de la clase mas los que ya tienen asistencia
-            alumno_1 = Alumno.objects.filter(clases=obj.clase_orig)
-            alumno_2 = Asistencia.objects.filter(clase_registro_id=obj.pk)
-            alumno_2 = map(lambda al: al.alumno, alumno_2)        
+            alumnos_presentes = Asistencia.objects.filter(clase_registro_id=obj.pk)
+            alumnos_clase = Alumno.objects.filter(clases=obj.clase_orig)
 
-            alumno = (alumno_1 | alumno_2).distinct()
-            # alumno = alumno_2
+            for al in alumnos_presentes:
+                lista_alumnos.append(
+                    {
+                        'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
+                        'alumno_pk': al.alumno.pk,
+                        'asist_pk': al.pk,
+                        'presente': True
+                    }
+                )
 
-            
-            # for al in alumno:
-            #     print(al.values())
-                # lista_alumnos.append(
-                #     {
-                #         'nombre': '%s, %s' % (al.apellido, al.nombre),
-                #         'alumno_pk': al.pk,
-                #         'asist_pk': "",
-                #         'presente': False
-                #     }
-                # )
+            li = [x['alumno_pk'] for x in lista_alumnos]
 
-            # for al in alumno:
-            #     if al in alumno_2:
-            #         lista_alumnos.append(
-            #             {
-            #                 'nombre': '%s, %s' % (al.apellido, al.nombre),
-            #                 'pk': al.pk,
-            #                 'presente': True
-            #             }
-            #         )
-            #     else:
-            #         lista_alumnos.append(
-            #             {
-            #                 'nombre': '%s, %s' % (al.apellido, al.nombre),
-            #                 'pk': al.pk,
-            #                 'presente': False
-            #             }
-            #         )
+            for al in alumnos_clase:
+                if al.pk not in li:
+                    lista_alumnos.append(
+                        {
+                            'nombre': '%s, %s' % (al.apellido, al.nombre),
+                            'alumno_pk': al.pk,
+                            'asist_pk': "",
+                            'presente': False
+                        }
+                    )
+
+            # print([d.alumno.pk for d in alumno_2])
+
+            # for al in alumno_2:
+            #     for d in lista_alumnos:
+            #         if d['alumno_pk'] == al.pk:
+            #             d['presente'] = True
+            #         else:
+            #             lista_alumnos.append(
+            #                 {
+            #                     'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
+            #                     'alumno_pk': al.alumno.pk,
+            #                     'asist_pk': al.pk,
+            #                     'presente': True
+            #                 }
+            #             )
 
         return lista_alumnos
 
