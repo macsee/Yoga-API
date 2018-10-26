@@ -19,13 +19,15 @@ from rest_framework.routers import DefaultRouter
 from yogapp import views
 
 router = DefaultRouter()
-router.register(r'alumnos', views.AlumnosView)
-router.register(r'profesores', views.ProfesoresView)
-router.register(r'clases', views.ClasesView)
-router.register(r'especialidades', views.EspecialidadesView)
+router.register(r'alumnos', views.AlumnosView, 'alumnos')
+router.register(r'profesores', views.ProfesoresView, 'profesores')
+router.register(r'clases', views.ClasesView, 'clases')
+router.register(r'especialidades', views.EspecialidadesView, 'especialidades')
 # router.register(r'registro', views.RegistroAlumnosView, 'registro')
 router.register(r'clase_dia', views.RegistroClasesView, 'clase_dia')
 router.register(r'asistencias', views.AsistenciasView, 'asistencias')
+router.register(r'pagos', views.PagosView, 'pagos')
+router.register(r'cuenta_corriente', views.CuentaCorrienteView, 'cuenta_corriente')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

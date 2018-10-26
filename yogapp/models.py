@@ -4,6 +4,7 @@ from datetime import date, timedelta
 
 # Create your models here.
 
+
 def create_clases(obj):
     dias = ["LU", "MA", "MI", "JU", "VI", "SA", "DO"]
     dstart = date.today()
@@ -25,7 +26,7 @@ def update_clases(obj):
 def delete_clases(obj):
     dstart = date.today()
 
-    RegistroClase.objects.filter(clase_orig__pk__iexact=obj.pk).filter(fecha__lte=dstart).delete()
+    RegistroClase.objects.filter(clase_orig__pk__iexact=obj.pk).filter(fecha__gte=dstart).delete()
 
 
 class Usuario(models.Model):
@@ -54,8 +55,8 @@ class Profesor(models.Model):
     direccion = models.CharField(max_length=255, blank=True)
     ciudad = models.CharField(max_length=255, blank=True)
     especialidad = models.ManyToManyField(Especialidad, blank=True)
-    fecha_nac = models.DateField(blank=True)
-    fecha_ing = models.DateTimeField(auto_now_add=True)
+    fecha_nac = models.DateField(blank=True, null=True)
+    fecha_ing = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return '%s, %s' % (self.apellido, self.nombre)
@@ -96,8 +97,8 @@ class Alumno(models.Model):
     dni = models.CharField(max_length=100, blank=True)
     direccion = models.CharField(max_length=255, blank=True)
     ciudad = models.CharField(max_length=255, blank=True)
-    fecha_nac = models.DateField(blank=True)
-    fecha_ing = models.DateTimeField(auto_now_add=True)
+    fecha_nac = models.DateField(blank=True, null=True)
+    fecha_ing = models.DateTimeField(auto_now_add=True, blank=True)
     clases = models.ManyToManyField(Clase, blank=True)
     tel_contacto = models.CharField(max_length=100, blank=True)
     obra_social = models.CharField(max_length=100, blank=True)
@@ -108,11 +109,30 @@ class Alumno(models.Model):
         return '%s, %s' % (self.apellido, self.nombre)
 
 
-class Pago(models.Model):
+class CuentaCorriente(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete=models.SET_NULL, null=True)
-    valor = models.IntegerField()#positivo o negativo (debito o credito)
+    valor = models.IntegerField()  # positivo o negativo (debito o credito)
     concepto = models.CharField(max_length=100)
     fecha = models.DateField()
+    last_update = models.DateTimeField(auto_now_add=True, blank=True)
+
+
+class Pago(models.Model):
+    alumno = models.ForeignKey(Alumno, on_delete=models.SET_NULL, null=True)
+    valor_total = models.IntegerField(default=0)
+    valor_pagado = models.IntegerField(default=0)
+    concepto = models.CharField(max_length=100)
+    fecha = models.DateField()
+    last_update = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def save(self, *args, **kwargs):
+
+        if self.valor_pagado != 0:
+            print("Debito y Credito")
+            CuentaCorriente.objects.create(alumno=self.alumno, valor=-1*self.valor_total, concepto=self.concepto, fecha=self.fecha)
+
+        CuentaCorriente.objects.create(alumno=self.alumno, valor=self.valor_pagado, concepto=self.concepto,
+                                       fecha=self.fecha)
 
 
 class RegistroClase(models.Model):
@@ -129,7 +149,6 @@ class Asistencia(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete=models.SET_NULL, null=True)
     fecha = models.DateField()
     clase_registro = models.ForeignKey(RegistroClase, on_delete=models.SET_NULL, null=True)
-    # clase = models.ForeignKey(Clase, on_delete=models.DO_NOTHING)
 
 # Echar un vistazo a "post_save" en documentacion de Django para poder realizar acciones luego de savear datos.
 # Por ejemplo, insertar informacion en una tabla registro que mantenga un diario de las modificaciones en la base de datos.

@@ -49,7 +49,7 @@ class ClaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Clase
         # depth = 1
-        fields = ('url', 'pk', 'nombre', 'profesor', 'dia', 'hora_inicio', 'hora_fin')
+        fields = ('pk', 'nombre', 'profesor', 'dia', 'hora_inicio', 'hora_fin')
 
     @staticmethod
     def get_profesor_data(obj):
@@ -123,22 +123,6 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
                         }
                     )
 
-            # print([d.alumno.pk for d in alumno_2])
-
-            # for al in alumno_2:
-            #     for d in lista_alumnos:
-            #         if d['alumno_pk'] == al.pk:
-            #             d['presente'] = True
-            #         else:
-            #             lista_alumnos.append(
-            #                 {
-            #                     'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
-            #                     'alumno_pk': al.alumno.pk,
-            #                     'asist_pk': al.pk,
-            #                     'presente': True
-            #                 }
-            #             )
-
         return lista_alumnos
 
     @staticmethod
@@ -187,3 +171,17 @@ class ClaseAlumnoSerializer(serializers.ModelSerializer):
                 'nombre': '%s, %s' % (obj.profesor.apellido, obj.profesor.nombre),
                 'pk': obj.profesor.pk
             }
+
+
+class PagosSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Pago
+        fields = '__all__'
+
+
+class CuentaCorrienteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CuentaCorriente
+        fields = '__all__'

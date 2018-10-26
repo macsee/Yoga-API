@@ -3,12 +3,12 @@ from .models import *
 
 
 class AlumnoFilter(myfilters.FilterSet):
-    search_name = myfilters.CharFilter(name='nombre', lookup_expr='istartswith')
+    apellido = myfilters.CharFilter('apellido', lookup_expr='istartswith')
     strict = True
 
     class Meta:
         model = Alumno
-        fields = ['search_name']
+        fields = ['apellido']
 
 
 class ClaseFilter(myfilters.FilterSet):
