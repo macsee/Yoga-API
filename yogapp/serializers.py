@@ -92,7 +92,7 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
                     {
                         'nombre': '%s, %s' % (al.apellido, al.nombre),
                         'alumno_pk': al.pk,
-                        'asist_pk': "",
+                        'asist_pk': None,
                         'presente': False
                     }
                 )

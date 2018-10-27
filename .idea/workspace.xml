@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d8dfeeda-5135-419c-9d50-0cb89766f385" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yogapp/filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/yogapp/filters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yogapp/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/yogapp/migrations/0001_initial.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yogapp/migrations/0002_auto_20181023_1620.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/yogapp/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/yogapp/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yogapp/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/yogapp/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yogapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/yogapp/views.py" afterDir="false" />
     </list>
@@ -22,27 +16,27 @@
     <session id="-1325641917">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="21" />
+          <entry key="project.closed" value="24" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.open.time.6" value="10" />
-          <entry key="project.open.time.7" value="5" />
+          <entry key="project.open.time.6" value="12" />
+          <entry key="project.open.time.7" value="6" />
           <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="21" />
+          <entry key="project.opened" value="24" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="35" />
-          <entry key="py" value="6674" />
+          <entry key="py" value="7099" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="35" />
-          <entry key="Python" value="6674" />
+          <entry key="Python" value="7099" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -71,8 +65,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/yogapp/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="22" column="22" lean-forward="true" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+            <state relative-caret-position="300">
+              <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
                 <marker date="1540512453822" expanded="true" signature="3741:4046" ph="..." />
@@ -90,29 +84,29 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/yogapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="16" column="90" selection-start-line="16" selection-start-column="90" selection-end-line="16" selection-end-column="90" />
+            <state relative-caret-position="1875">
+              <caret line="130" column="7" selection-start-line="130" selection-start-column="7" selection-end-line="130" selection-end-column="7" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
-                <marker date="1540521010088" expanded="true" signature="1028:1103" ph="..." />
-                <marker date="1540521010088" expanded="true" signature="4601:4602" ph="..." />
-                <marker date="1540521010088" expanded="true" signature="4601:4766" ph="..." />
+                <marker date="1540598643630" expanded="true" signature="1043:1122" ph="..." />
+                <marker date="1540598643630" expanded="true" signature="4557:4558" ph="..." />
+                <marker date="1540598643630" expanded="true" signature="4557:4722" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/yogapp/serializers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="307">
-              <caret line="75" lean-forward="true" selection-start-line="75" selection-end-line="75" />
+            <state relative-caret-position="471">
+              <caret line="94" column="40" selection-start-line="94" selection-start-column="40" selection-end-line="94" selection-end-column="40" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
-                <marker date="1540512704817" expanded="true" signature="5734:5735" ph="..." />
+                <marker date="1540598738539" expanded="true" signature="5736:5737" ph="..." />
               </folding>
             </state>
           </provider>
@@ -138,9 +132,9 @@
         <option value="$PROJECT_DIR$/yogapp/admin.py" />
         <option value="$PROJECT_DIR$/api/urls.py" />
         <option value="$PROJECT_DIR$/yogapp/models.py" />
-        <option value="$PROJECT_DIR$/yogapp/serializers.py" />
         <option value="$PROJECT_DIR$/yogapp/filters.py" />
         <option value="$PROJECT_DIR$/yogapp/views.py" />
+        <option value="$PROJECT_DIR$/yogapp/serializers.py" />
       </list>
     </option>
   </component>
@@ -154,7 +148,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -176,6 +169,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -287,7 +281,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17791899" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -299,7 +292,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329927" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.25068492" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.24931507" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32739726" />
       <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
@@ -333,21 +326,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/yogapp/serializers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="307">
-          <caret line="75" lean-forward="true" selection-start-line="75" selection-end-line="75" />
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-            <marker date="1540512704817" expanded="true" signature="5734:5735" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/yogapp/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="22" column="22" lean-forward="true" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+        <state relative-caret-position="300">
+          <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
           <folding>
             <element signature="e#0#28#0" expanded="true" />
             <marker date="1540512453822" expanded="true" signature="3741:4046" ph="..." />
@@ -364,13 +346,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/yogapp/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="16" column="90" selection-start-line="16" selection-start-column="90" selection-end-line="16" selection-end-column="90" />
+        <state relative-caret-position="1875">
+          <caret line="130" column="7" selection-start-line="130" selection-start-column="7" selection-end-line="130" selection-end-column="7" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
-            <marker date="1540521010088" expanded="true" signature="1028:1103" ph="..." />
-            <marker date="1540521010088" expanded="true" signature="4601:4602" ph="..." />
-            <marker date="1540521010088" expanded="true" signature="4601:4766" ph="..." />
+            <marker date="1540598643630" expanded="true" signature="1043:1122" ph="..." />
+            <marker date="1540598643630" expanded="true" signature="4557:4558" ph="..." />
+            <marker date="1540598643630" expanded="true" signature="4557:4722" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/yogapp/serializers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="471">
+          <caret line="94" column="40" selection-start-line="94" selection-start-column="40" selection-end-line="94" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+            <marker date="1540598738539" expanded="true" signature="5736:5737" ph="..." />
           </folding>
         </state>
       </provider>
