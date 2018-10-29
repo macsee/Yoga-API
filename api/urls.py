@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 from yogapp import views
 
@@ -23,7 +24,6 @@ router.register(r'alumnos', views.AlumnosView, 'alumnos')
 router.register(r'profesores', views.ProfesoresView, 'profesores')
 router.register(r'clases', views.ClasesView, 'clases')
 router.register(r'especialidades', views.EspecialidadesView, 'especialidades')
-# router.register(r'registro', views.RegistroAlumnosView, 'registro')
 router.register(r'clase_dia', views.RegistroClasesView, 'clase_dia')
 router.register(r'asistencias', views.AsistenciasView, 'asistencias')
 router.register(r'pagos', views.PagosView, 'pagos')
@@ -31,5 +31,6 @@ router.register(r'cuenta_corriente', views.CuentaCorrienteView, 'cuenta_corrient
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('asistencias/set', views.set_asistencias),
     path('', include(router.urls))
 ]

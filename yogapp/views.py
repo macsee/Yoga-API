@@ -3,7 +3,10 @@ from .serializers import *
 from .filters import *
 from rest_framework import response
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework import exceptions
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
 
 
 def validate_args(request, arg):
@@ -109,19 +112,19 @@ class AsistenciasView(viewsets.ModelViewSet):
         return result_clase
 
 
-class ClaseDiaView(viewsets.ModelViewSet):
-    serializer_class = ClaseAlumnoSerializer
-
-    def get_queryset(self):
-
-        if validate_args(self.request, "dia") == 1:
-            result_clase = Clase.objects.all()
-        elif validate_args(self.request, "dia") == 2:
-            result_clase = Clase.objects.filter(dia__iexact=self.request.query_params.get("dia"))
-        else:
-            raise exceptions.NotFound('Query mal formada o no permitida')
-
-        return result_clase
+# class ClaseDiaView(viewsets.ModelViewSet):
+#     serializer_class = ClaseAlumnoSerializer
+#
+#     def get_queryset(self):
+#
+#         if validate_args(self.request, "dia") == 1:
+#             result_clase = Clase.objects.all()
+#         elif validate_args(self.request, "dia") == 2:
+#             result_clase = Clase.objects.filter(dia__iexact=self.request.query_params.get("dia"))
+#         else:
+#             raise exceptions.NotFound('Query mal formada o no permitida')
+#
+#         return result_clase
 
 
 class RegistroClasesView(viewsets.ModelViewSet):
@@ -135,7 +138,7 @@ class RegistroClasesView(viewsets.ModelViewSet):
 
         if validate_args(self.request, "fecha") == 1:
             result_clase = RegistroClase.objects.all()
-        elif validate_args(self.request, "dia") == 2:
+        elif validate_args(self.request, "fecha") == 2:
             result_clase = RegistroClase.objects.filter(fecha__iexact=self.request.query_params.get("fecha"))
         else:
             raise exceptions.NotFound('Query mal formada o no permitida')
@@ -170,7 +173,9 @@ class CuentaCorrienteView(viewsets.ModelViewSet):
             result_clase = None
 
         if result_clase:
-            if validate_args(self.request, "concepto") == 2:
+            if validate_args(self.request, "concepto") == 1:
+                result_clase = result_clase
+            elif validate_args(self.request, "concepto") == 2:
                 result_clase = result_clase.filter(concepto__iexact=(self.request.query_params.get("concepto")))
             else:
                 raise exceptions.NotFound('Query mal formada o no permitida')
@@ -178,4 +183,16 @@ class CuentaCorrienteView(viewsets.ModelViewSet):
             raise exceptions.NotFound('Query mal formada o no permitida')
 
         return result_clase
+
+
+def set_asistencias(request):
+
+
+
+    response = Response({"detail": "This action is not authorized"})
+    response.accepted_renderer = JSONRenderer()
+    response.accepted_media_type = "application/json"
+    response.renderer_context = {}
+
+    return response
 

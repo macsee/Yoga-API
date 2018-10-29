@@ -44,30 +44,37 @@ class AsistenciasSerializer(serializers.ModelSerializer):
 
 
 class ClaseSerializer(serializers.ModelSerializer):
-    # profesor = serializers.SerializerMethodField(method_name='get_profesor_data')
+    profesor_ = serializers.SerializerMethodField(method_name='get_profesor_data')
+    hora_inicio = serializers.TimeField(format="%H:%M")
+    hora_fin = serializers.TimeField(format="%H:%M")
 
     class Meta:
         model = Clase
         # depth = 1
-        fields = ('pk', 'nombre', 'profesor', 'dia', 'hora_inicio', 'hora_fin')
+        fields = ('id', 'nombre', 'profesor', 'profesor_', 'dia', 'hora_inicio', 'hora_fin', 'cupo')
 
     @staticmethod
     def get_profesor_data(obj):
-        return {
-                'nombre': obj.profesor.nombre,
-                'apellido': obj.profesor.apellido,
-                'pk': obj.profesor.pk
-                }
+        if obj.profesor is None:
+            return {}
+        else:
+            return {
+                    'nombre': obj.profesor.nombre,
+                    'apellido': obj.profesor.apellido,
+                    'id': obj.profesor.id
+                    }
 
 
 class RegistroClasesSerializer(serializers.ModelSerializer):
 
     lista_alumnos = serializers.SerializerMethodField(method_name='get_lista_alumno')
-    profesor = serializers.SerializerMethodField(method_name='get_profesor_data')
+    profesor_ = serializers.SerializerMethodField(method_name='get_profesor_data')
+    hora_inicio = serializers.TimeField(format="%H:%M")
+    hora_fin = serializers.TimeField(format="%H:%M")
 
     class Meta:
         model = RegistroClase
-        fields = ('pk', 'nombre', 'clase_orig', 'lista_alumnos', 'profesor', 'fecha', 'hora_inicio', 'hora_fin', 'estado')
+        fields = ('id', 'nombre', 'clase_orig', 'lista_alumnos', 'profesor_', 'fecha', 'hora_inicio', 'hora_fin', 'estado', 'cupo')
 
     @staticmethod
     def get_lista_alumno(obj):
@@ -75,49 +82,52 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
         now = datetime.datetime.now() - datetime.timedelta(hours=3)
 
         if now.date() > obj.fecha: #Pasado
-            alumno = Asistencia.objects.filter(clase_registro=obj.pk)
+            alumno = Asistencia.objects.filter(clase_registro=obj.id)
             for al in alumno:
-                lista_alumnos.append(
-                    {
-                        'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
-                        'alumno_pk': al.alumno.pk,
-                        'asist_pk': al.pk,
-                        'presente': True
-                    }
-                )
+                if al.activo:
+                    lista_alumnos.append(
+                        {
+                            'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
+                            'alumno_pk': al.alumno.id,
+                            'asist_pk': al.id,
+                            'presente': True
+                        }
+                    )
         elif now.date() < obj.fecha: #Futuro
             alumno = Alumno.objects.filter(clases=obj.clase_orig)
             for al in alumno:
-                lista_alumnos.append(
-                    {
-                        'nombre': '%s, %s' % (al.apellido, al.nombre),
-                        'alumno_pk': al.pk,
-                        'asist_pk': None,
-                        'presente': False
-                    }
-                )
+                if al.activo:
+                    lista_alumnos.append(
+                        {
+                            'nombre': '%s, %s' % (al.apellido, al.nombre),
+                            'alumno_pk': al.id,
+                            'asist_pk': None,
+                            'presente': False
+                        }
+                    )
         else: #Presente. Hay que combinar los alumnos de la clase mas los que ya tienen asistencia
-            alumnos_presentes = Asistencia.objects.filter(clase_registro_id=obj.pk)
+            alumnos_presentes = Asistencia.objects.filter(clase_registro_id=obj.id)
             alumnos_clase = Alumno.objects.filter(clases=obj.clase_orig)
 
             for al in alumnos_presentes:
-                lista_alumnos.append(
-                    {
-                        'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
-                        'alumno_pk': al.alumno.pk,
-                        'asist_pk': al.pk,
-                        'presente': True
-                    }
+                if al.activo:
+                    lista_alumnos.append(
+                        {
+                            'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
+                            'alumno_pk': al.alumno.id,
+                            'asist_pk': al.id,
+                            'presente': True
+                        }
                 )
 
             li = [x['alumno_pk'] for x in lista_alumnos]
 
             for al in alumnos_clase:
-                if al.pk not in li:
+                if al.id not in li and al.activo:
                     lista_alumnos.append(
                         {
                             'nombre': '%s, %s' % (al.apellido, al.nombre),
-                            'alumno_pk': al.pk,
+                            'alumno_pk': al.id,
                             'asist_pk': "",
                             'presente': False
                         }
@@ -133,44 +143,46 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
         else:    
             return {
                 'nombre': '%s, %s' % (obj.profesor.apellido, obj.profesor.nombre),
-                'pk': obj.profesor.pk
+                'id': obj.profesor.id
             }
 
 
-class ClaseAlumnoSerializer(serializers.ModelSerializer):
-    # clase = serializers.SerializerMethodField(method_name='get_clase_data')
-    # alumno = serializers.SerializerMethodField(method_name='get_alumno_data')
-    lista_alumnos = serializers.SerializerMethodField(method_name='get_lista_alumno')
-    profesor = serializers.SerializerMethodField(method_name='get_profesor_data')
-
-    class Meta:
-        model = Clase
-        fields = ('url', 'pk', 'nombre', 'lista_alumnos', 'profesor', 'dia', 'hora_inicio', 'hora_fin')
-        # fields = ('pk', 'alumno', 'clase')
-
-    @staticmethod
-    def get_lista_alumno(obj):
-        lista_alumnos = []
-        alumno = Alumno.objects.filter(clases=obj.pk)
-        for al in alumno:
-            lista_alumnos.append(
-                {
-                    'nombre': '%s, %s' % (al.apellido, al.nombre),
-                    'pk': al.pk
-                }
-            )
-
-        return lista_alumnos
-
-    @staticmethod
-    def get_profesor_data(obj):
-        if obj.profesor is None:
-            return None
-        else:    
-            return {
-                'nombre': '%s, %s' % (obj.profesor.apellido, obj.profesor.nombre),
-                'pk': obj.profesor.pk
-            }
+# class ClaseAlumnoSerializer(serializers.ModelSerializer):
+#     # clase = serializers.SerializerMethodField(method_name='get_clase_data')
+#     # alumno = serializers.SerializerMethodField(method_name='get_alumno_data')
+#     lista_alumnos = serializers.SerializerMethodField(method_name='get_lista_alumno')
+#     profesor = serializers.SerializerMethodField(method_name='get_profesor_data')
+#     hora_inicio = serializers.TimeField(format="%H:%M")
+#     hora_fin = serializers.TimeField(format="%H:%M")
+#
+#     class Meta:
+#         model = Clase
+#         fields = ('id', 'nombre', 'lista_alumnos', 'profesor', 'dia', 'hora_inicio', 'hora_fin')
+#         # fields = ('pk', 'alumno', 'clase')
+#
+#     @staticmethod
+#     def get_lista_alumno(obj):
+#         lista_alumnos = []
+#         alumno = Alumno.objects.filter(clases=obj.id)
+#         for al in alumno:
+#             lista_alumnos.append(
+#                 {
+#                     'nombre': '%s, %s' % (al.apellido, al.nombre),
+#                     'id': al.id
+#                 }
+#             )
+#
+#         return lista_alumnos
+#
+#     @staticmethod
+#     def get_profesor_data(obj):
+#         if obj.profesor is None:
+#             return None
+#         else:
+#             return {
+#                 'nombre': '%s, %s' % (obj.profesor.apellido, obj.profesor.nombre),
+#                 'id': obj.profesor.id
+#             }
 
 
 class PagosSerializer(serializers.ModelSerializer):

@@ -13,20 +13,20 @@ def create_clases(obj):
     for x in range((dend-dstart).days + 1):
         fecha = dstart + timedelta(days=x)
         if dias[fecha.weekday()] == obj.dia:
-            RegistroClase.objects.create(fecha=fecha, profesor=obj.profesor, clase_orig=obj, hora_inicio=obj.hora_inicio, hora_fin=obj.hora_fin)
+            RegistroClase.objects.create(fecha=fecha, profesor=obj.profesor, clase_orig=obj, hora_inicio=obj.hora_inicio, hora_fin=obj.hora_fin, nombre=obj.nombre, cupo=obj.cupo)
 
 
 def update_clases(obj):
     dstart = date.today()
 
-    RegistroClase.objects.filter(clase_orig__pk__iexact=obj.pk).filter(fecha__lte=dstart).delete()
+    RegistroClase.objects.filter(clase_orig__id__iexact=obj.id).filter(fecha__gte=dstart).delete()
     create_clases(obj)
 
 
 def delete_clases(obj):
     dstart = date.today()
 
-    RegistroClase.objects.filter(clase_orig__pk__iexact=obj.pk).filter(fecha__gte=dstart).delete()
+    RegistroClase.objects.filter(clase_orig__id__iexact=obj.id).filter(fecha__gte=dstart).delete()
 
 
 class Usuario(models.Model):
@@ -68,6 +68,7 @@ class Clase(models.Model):
     dia = models.CharField(max_length=2)
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
+    cupo = models.IntegerField(default=0)
     activa = models.BooleanField(default=True)
     # alumnos = models.ManyToManyField(Alumno, blank=True) #, through='RegistroAlumno')
 
@@ -76,7 +77,7 @@ class Clase(models.Model):
 
     def save(self, *args, **kwargs):
 
-        if self.pk is None:
+        if self.id is None:
             print("Creating")
             super(Clase, self).save(*args, **kwargs)
             create_clases(self)
@@ -103,6 +104,7 @@ class Alumno(models.Model):
     tel_contacto = models.CharField(max_length=100, blank=True)
     obra_social = models.CharField(max_length=100, blank=True)
     antecedentes = models.TextField(max_length=500, blank=True)
+    membresia = models.CharField(max_length=10, blank=True)
     activo = models.BooleanField(default=True)
 
     def __str__(self):
@@ -142,6 +144,7 @@ class RegistroClase(models.Model):
     fecha = models.DateField()
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
+    cupo = models.IntegerField(default=0)
     estado = models.CharField(max_length=100, blank=True)
 
 
