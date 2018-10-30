@@ -31,6 +31,6 @@ router.register(r'cuenta_corriente', views.CuentaCorrienteView, 'cuenta_corrient
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('asistencias/set', views.set_asistencias),
+    # path('asistencias/set', views.set_asistencias),
     path('', include(router.urls))
 ]

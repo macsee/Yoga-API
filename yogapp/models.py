@@ -153,6 +153,10 @@ class Asistencia(models.Model):
     fecha = models.DateField()
     clase_registro = models.ForeignKey(RegistroClase, on_delete=models.SET_NULL, null=True)
 
+    def save(self, *args, **kwargs):
+
+        print(self)
+
 # Echar un vistazo a "post_save" en documentacion de Django para poder realizar acciones luego de savear datos.
 # Por ejemplo, insertar informacion en una tabla registro que mantenga un diario de las modificaciones en la base de datos.
 # O para la tabla de clases por dia que deben generarse para una determinada cantidad de meses.

@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import exceptions
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 
 
 def validate_args(request, arg):
@@ -185,14 +186,14 @@ class CuentaCorrienteView(viewsets.ModelViewSet):
         return result_clase
 
 
-def set_asistencias(request):
-
-
-
-    response = Response({"detail": "This action is not authorized"})
-    response.accepted_renderer = JSONRenderer()
-    response.accepted_media_type = "application/json"
-    response.renderer_context = {}
-
-    return response
+# @csrf_exempt
+# def set_asistencias(request):
+#
+#     print(request)
+#     response = Response({"detail": "This action is not authorized"})
+#     response.accepted_renderer = JSONRenderer()
+#     response.accepted_media_type = "application/json"
+#     response.renderer_context = {}
+#
+#     return response
 
