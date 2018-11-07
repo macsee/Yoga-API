@@ -1,6 +1,6 @@
 from django.db import models
 import datetime
-from datetime import date, timedelta
+from datetime import date, timedelta, timezone
 
 # Create your models here.
 
@@ -9,7 +9,6 @@ def create_clases(obj):
     dias = ["LU", "MA", "MI", "JU", "VI", "SA", "DO"]
     dstart = date.today()
     dend = date.today() + datetime.timedelta(days=30)
-
     for x in range((dend-dstart).days + 1):
         fecha = dstart + timedelta(days=x)
         if dias[fecha.weekday()] == obj.dia:
@@ -152,10 +151,6 @@ class Asistencia(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete=models.SET_NULL, null=True)
     fecha = models.DateField()
     clase_registro = models.ForeignKey(RegistroClase, on_delete=models.SET_NULL, null=True)
-
-    def save(self, *args, **kwargs):
-
-        print(self)
 
 # Echar un vistazo a "post_save" en documentacion de Django para poder realizar acciones luego de savear datos.
 # Por ejemplo, insertar informacion en una tabla registro que mantenga un diario de las modificaciones en la base de datos.

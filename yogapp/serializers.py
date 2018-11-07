@@ -79,7 +79,7 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_lista_alumno(obj):
         lista_alumnos = []
-        now = datetime.datetime.now() - datetime.timedelta(hours=3)
+        now = datetime.datetime.now()
 
         if now.date() > obj.fecha: #Pasado
             alumno = Asistencia.objects.filter(clase_registro=obj.id)
