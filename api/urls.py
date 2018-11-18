@@ -18,6 +18,7 @@ from django.urls import include, path
 from django.conf.urls import url
 from rest_framework.routers import DefaultRouter
 from yogapp import views
+from yogapp import utils
 
 router = DefaultRouter()
 router.register(r'alumnos', views.AlumnosView, 'alumnos')
@@ -31,7 +32,8 @@ router.register(r'cuenta_corriente', views.CuentaCorrienteView, 'cuenta_corrient
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('asistencias/set', views.set_asistencias),
-    path('asistencias/get', views.get_asistencias),
+    path('asistencias/set', utils.set_asistencias),
+    path('asistencias/get', utils.get_asistencias),
+    path('asistencias/clean', utils.delete_asistencias),
     path('', include(router.urls))
 ]

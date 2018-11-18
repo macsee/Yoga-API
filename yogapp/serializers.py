@@ -89,6 +89,7 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
                         'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
                         'alumno_pk': al.alumno.id,
                         'asist_pk': al.id,
+                        'presente': True
                     }
                 )
         elif now.date() < obj.fecha: #Futuro
@@ -100,6 +101,7 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
                             'nombre': '%s, %s' % (al.apellido, al.nombre),
                             'alumno_pk': al.id,
                             'asist_pk': None,
+                            'presente': False
                         }
                     )
         else: #Presente. Hay que combinar los alumnos de la clase mas los que ya tienen asistencia
@@ -112,6 +114,7 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
                         'nombre': '%s, %s' % (al.alumno.apellido, al.alumno.nombre),
                         'alumno_pk': al.alumno.id,
                         'asist_pk': al.id,
+                        'presente': True
                     }
                 )
 
@@ -124,6 +127,7 @@ class RegistroClasesSerializer(serializers.ModelSerializer):
                             'nombre': '%s, %s' % (al.apellido, al.nombre),
                             'alumno_pk': al.id,
                             'asist_pk': None,
+                            'presente': False
                         }
                     )
 
