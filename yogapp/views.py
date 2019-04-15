@@ -93,6 +93,14 @@ class ClasesView(viewsets.ModelViewSet):
     #
     #     return queryset
 
+#
+# class ClaseFechaView(viewsets.ModelViewSet):
+#     """
+#     API endpoint that allows Alumnos instances
+#     to be viewed or edited.
+#     """
+#     queryset = ClaseFecha.objects.all()
+#     serializer_class = ClaseFechaSerializer
 
 class AsistenciasView(viewsets.ModelViewSet):
     """

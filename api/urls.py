@@ -26,12 +26,14 @@ router.register(r'profesores', views.ProfesoresView, 'profesores')
 router.register(r'clases', views.ClasesView, 'clases')
 router.register(r'especialidades', views.EspecialidadesView, 'especialidades')
 router.register(r'clase_dia', views.RegistroClasesView, 'clase_dia')
+# router.register(r'clase_fecha', views.ClaseFechaView, 'clase_fecha')
 router.register(r'asistencias', views.AsistenciasView, 'asistencias')
 router.register(r'pagos', views.PagosView, 'pagos')
 router.register(r'cuenta_corriente', views.CuentaCorrienteView, 'cuenta_corriente')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('alumnos/create/<str:alumno>/', utils.create_alumno),
     path('asistencias/set', utils.set_asistencias),
     path('asistencias/get', utils.get_asistencias),
     path('asistencias/clean', utils.delete_asistencias),

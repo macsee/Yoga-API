@@ -1,7 +1,7 @@
 from django.db import models
 import datetime
 from datetime import date, timedelta, timezone
-
+from django.db import transaction
 # Create your models here.
 
 
@@ -74,6 +74,7 @@ class Clase(models.Model):
     def __str__(self):
         return self.nombre
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
 
         if self.id is None:
@@ -85,6 +86,7 @@ class Clase(models.Model):
             super(Clase, self).save(*args, **kwargs)
             update_clases(self)
 
+    @transaction.atomic
     def delete(self, *args, **kwargs):
         delete_clases(self)
         super(Clase, self).delete(*args, **kwargs)
@@ -109,6 +111,15 @@ class Alumno(models.Model):
     def __str__(self):
         return '%s, %s' % (self.apellido, self.nombre)
 
+#
+# class ClaseFecha(models.Model):
+#     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)
+#     clase = models.ForeignKey(Clase, on_delete=models.CASCADE)
+#     fecha = models.DateTimeField(auto_now_add=True, blank=True)
+#
+#     def __str__(self):
+#         return '%s, %s' % (self.clase, self.fecha)
+
 
 class CuentaCorriente(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete=models.SET_NULL, null=True)
@@ -126,6 +137,7 @@ class Pago(models.Model):
     fecha = models.DateField()
     last_update = models.DateTimeField(auto_now_add=True, blank=True)
 
+    @transaction.atomic
     def save(self, *args, **kwargs):
 
         if self.valor_pagado != 0:
@@ -146,11 +158,16 @@ class RegistroClase(models.Model):
     cupo = models.IntegerField(default=0)
     estado = models.CharField(max_length=100, blank=True)
 
+    def __str__(self):
+        return self.nombre
+
 
 class Asistencia(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete=models.SET_NULL, null=True)
     fecha = models.DateField()
     clase_registro = models.ForeignKey(RegistroClase, on_delete=models.SET_NULL, null=True)
+    presente = models.BooleanField(default=False)
+    fecha_init = models.DateField(auto_now=True)
 
 # Echar un vistazo a "post_save" en documentacion de Django para poder realizar acciones luego de savear datos.
 # Por ejemplo, insertar informacion en una tabla registro que mantenga un diario de las modificaciones en la base de datos.

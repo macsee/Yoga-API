@@ -9,26 +9,42 @@ import json
 @csrf_exempt
 def set_asistencias(request):
     response = Response("")
-    for key in request.POST:
-        value = request.POST[key]
+
+    for key, value in request.POST.dict().items():
         js = json.loads(value)
-        print(js)
-        if not js['id']:
-            alumno = Alumno.objects.get(id=js['alumno'])
-            clase_registro = RegistroClase.objects.get(id=js['clase_registro'])
-            Asistencia.objects.create(alumno=alumno, fecha=js['fecha'], clase_registro=clase_registro)
-            response = Response("")
-            response.status_code = 200
-        else:
-            Asistencia.objects.filter(id__exact=js['id']).delete()
-            response = Response("")
-            response.status_code = 200
+        asist = Asistencia.objects.filter(alumno__exact=js['alumno_pk']).filter(clase_registro__exact=js['clase_registro'])
+        if not asist:#Si no estaba en la tabla de asistencias
+            if js["presente"]:  # Si no estaba en la tabla de asistencias y le puse presente
+                print("Tengo que agregarlo como presente")
+                alumno = Alumno.objects.get(id=js['alumno_pk'])
+                clase_registro = RegistroClase.objects.get(id=js['clase_registro'])
+                Asistencia.objects.create(alumno=alumno, fecha=js['fecha'], clase_registro=clase_registro)
+                response = Response("")
+                response.status_code = 200
+            else: #Si no estaba en la tabla de asistencias y le puse ausente
+                print("No hago nada")
+        else: #Si estaba en la tabla de asistencias
+            if js["presente"]: #Si estaba en la tabla de asistencias y le puse presente
+                print("No hago nada")
+            else: #Si estaba en la tabla de asistencias y le puse ausente
+                print("Tengo que borrar un presente")
+                Asistencia.objects.filter(id__exact=asist.first().id).delete()
+                response = Response("")
+                response.status_code = 200
 
     response.accepted_renderer = JSONRenderer()
     response.accepted_media_type = "application/json"
     response.renderer_context = {}
 #
     return response
+
+@csrf_exempt
+def create_alumno(request, alumno):
+    print(request)
+    # for key, value in request.POST.dict().items():
+    #     js = json.loads(value)
+    #     print(js)
+
 
 @csrf_exempt
 def delete_asistencias(request):
